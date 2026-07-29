@@ -2,4 +2,5 @@
 .auto-sync.log
 .ai-sync-install.log
 .last-auto-pull
+.sync.lock
 .ai-sync/

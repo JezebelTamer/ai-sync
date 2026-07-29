@@ -74,6 +74,14 @@ function Clone-Or-Pull {
 
 # -- Pre-flight checks --------------------------------------------------------
 
+# The profile hook targets the Windows PowerShell 5.1 console profile; run
+# from pwsh 7 / ISE / VS Code, $PROFILE.CurrentUserCurrentHost points at a
+# different file and the hook would silently land where 5.1 never loads it.
+if (($PSVersionTable.PSEdition -and $PSVersionTable.PSEdition -ne 'Desktop') -or ($Host.Name -ne 'ConsoleHost')) {
+    Write-Host '[ai-sync] ERROR: run install.ps1 from the Windows PowerShell console (powershell.exe), not pwsh, ISE, or an IDE host.' -ForegroundColor Red
+    exit 1
+}
+
 Write-Step 'Checking prerequisites'
 Assert-Command 'git'  'https://git-scm.com/downloads'
 Assert-Command 'node' 'https://nodejs.org'
@@ -120,6 +128,12 @@ $nodePath = (Get-Command node).Source
 $wrapper  = Join-Path $SyncRepoPath 'tools\ai-sync.mjs'
 $logFile  = Join-Path $SyncRepoPath '.ai-sync-install.log'
 
+# The CLI reads .environments.json from the TOOL directory, not the sync
+# repo. Copy the repo's list across so every machine syncs the same explicit
+# environment set instead of auto-detecting from whatever dirs happen to
+# exist locally.
+Copy-Item (Join-Path $SyncRepoPath '.environments.json') (Join-Path $ToolRepoPath '.environments.json') -Force
+
 if (-not (Test-Path $wrapper)) {
     Write-Host "`n[ai-sync] ERROR: launcher not found at $wrapper - sync repo out of date?" -ForegroundColor Red
     exit 1
@@ -164,51 +178,37 @@ $escapedSyncRepo = $SyncRepoPath -replace "'", "''"
 $hookBlock = @"
 $hookMarker
 # Installed by ai-sync install.ps1 - do not edit this block manually.
-# Session start: APPLY the latest synced config (ai-sync pull, background,
-# throttled to once per hour). Session exit: CAPTURE local config changes and
-# publish them (ai-sync push). Both go through tools/ai-sync.mjs because
-# invoking dist/cli.js directly is a silent no-op on Windows.
-`$_aiSyncRepo = '$escapedSyncRepo'
-`$_aiSyncCli  = Join-Path `$_aiSyncRepo 'tools\ai-sync.mjs'
-`$_aiSyncLog  = Join-Path `$_aiSyncRepo '.auto-sync.log'
-
+# Sync logic lives in the repo (tools/auto-sync.ps1) so it updates via sync
+# itself: session start runs a throttled background pull+push, session exit
+# runs a bounded best-effort push. tools/ai-sync.mjs is the Windows-safe CLI
+# launcher (invoking dist/cli.js directly is a silent no-op on Windows).
 function global:ai-sync { & node '$escapedSyncRepo\tools\ai-sync.mjs' @args }
-
-if (Test-Path `$_aiSyncCli) {
-    if ((Test-Path `$_aiSyncLog) -and ((Get-Item `$_aiSyncLog).Length -gt 1MB)) { Clear-Content `$_aiSyncLog }
-    `$_aiSyncStamp = Join-Path `$_aiSyncRepo '.last-auto-pull'
-    `$_aiSyncDue = (-not (Test-Path `$_aiSyncStamp)) -or (((Get-Date) - (Get-Item `$_aiSyncStamp).LastWriteTime).TotalMinutes -ge 60)
-    if (`$_aiSyncDue) {
-        New-Item -ItemType File -Path `$_aiSyncStamp -Force | Out-Null
-        Start-Job -ScriptBlock {
-            param(`$cli, `$log)
-            & node `$cli --no-update-check pull *>> `$log
-        } -ArgumentList `$_aiSyncCli, `$_aiSyncLog | Out-Null
-    }
+`$_aiSyncAuto = '$escapedSyncRepo\tools\auto-sync.ps1'
+if (Test-Path `$_aiSyncAuto) { & `$_aiSyncAuto -Mode Start }
+if (-not (Get-Variable __aiSyncExitHooked -Scope Global -ErrorAction SilentlyContinue)) {
+    `$global:__aiSyncExitHooked = `$true
+    Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action {
+        `$auto = '$escapedSyncRepo\tools\auto-sync.ps1'
+        if (Test-Path `$auto) { & `$auto -Mode Exit }
+    } | Out-Null
 }
-
-Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action {
-    `$repo = '$escapedSyncRepo'
-    `$cli  = Join-Path `$repo 'tools\ai-sync.mjs'
-    if (Test-Path `$cli) {
-        & node `$cli --no-update-check push *>> (Join-Path `$repo '.auto-sync.log')
-    }
-} | Out-Null
 $hookEnd
 "@
 
-# Remove any existing hook block first (idempotent re-install)
+# Remove any existing hook block first (idempotent re-install).
+# Explicit UTF8 on read and write: 5.1 otherwise round-trips the profile
+# through ANSI and mangles any non-ASCII characters the user has in it.
 if (Test-Path $profilePath) {
-    $content = Get-Content $profilePath -Raw -ErrorAction SilentlyContinue
+    $content = Get-Content $profilePath -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
     if ($content -and ($content -match [regex]::Escape($hookMarker))) {
         $pattern = [regex]::Escape($hookMarker) + '[\s\S]*?' + [regex]::Escape($hookEnd) + '\r?\n?'
         $content = [regex]::Replace($content, $pattern, '')
-        Set-Content -Path $profilePath -Value $content.TrimEnd() -NoNewline
+        Set-Content -Path $profilePath -Value $content.TrimEnd() -NoNewline -Encoding UTF8
     }
 }
 
 # Append the new hook block
-Add-Content -Path $profilePath -Value "`n$hookBlock`n"
+Add-Content -Path $profilePath -Value "`n$hookBlock`n" -Encoding UTF8
 Write-OK "Profile hook installed at $profilePath"
 
 # -- 5. Summary ---------------------------------------------------------------
