@@ -21,11 +21,10 @@
 
 .EXAMPLE
     # Run from the internet - one command, fully automatic:
-    iwr -useb https://raw.githubusercontent.com/JezebelTamer/ai-sync/main/install.ps1 | iex
+    powershell -NoProfile -ExecutionPolicy Bypass -Command "& { $f = \"$env:TEMP\\ai-sync-install.ps1\"; iwr -useb 'https://raw.githubusercontent.com/JezebelTamer/ai-sync/main/install.ps1' -OutFile $f; & $f; Remove-Item $f }"
 
-    # Or with custom args:
-    powershell -NoProfile -ExecutionPolicy Bypass -File install.ps1 `
-        -SyncRepoUrl "https://github.com/YourUser/ai-sync.git"
+    # Or clone and run directly:
+    git clone --depth 1 https://github.com/JezebelTamer/ai-sync.git $HOME/.ai-sync; powershell -NoProfile -ExecutionPolicy Bypass -File $HOME/.ai-sync/install.ps1
 #>
 param(
     [string]$SyncRepoUrl  = 'https://github.com/JezebelTamer/ai-sync.git',
@@ -204,6 +203,6 @@ if (Test-Path $envFile) {
     Write-Host '    (none yet - run ai-sync env enable <name>)'
 }
 Write-Host ''
-Write-Host '  To re-run this installer on another machine:' -ForegroundColor Yellow
-Write-Host '    iwr -useb https://raw.githubusercontent.com/JezebelTamer/ai-sync/main/install.ps1 | iex'
+Write-Host '  To install on another machine, run:' -ForegroundColor Yellow
+Write-Host '    powershell -NoProfile -ExecutionPolicy Bypass -Command "& { $f = \"$env:TEMP\ai-sync-install.ps1\"; iwr -useb ''https://raw.githubusercontent.com/JezebelTamer/ai-sync/main/install.ps1'' -OutFile $f; & $f; Remove-Item $f }"'
 Write-Host ''
