@@ -62,6 +62,15 @@ $syncBody = {
 }
 
 if ($Mode -eq 'Task') {
+    # No console under a scheduled task, so PowerShell would decode node's
+    # output with a different codepage and append UTF-16 into a UTF-8 log, and
+    # node would still emit ANSI colour. Pin both or the log is unreadable.
+    try {
+        [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+        $OutputEncoding = [System.Text.Encoding]::UTF8
+    } catch {}
+    $env:NO_COLOR = '1'
+
     # The schedule is the throttle, so no stamp check. Still touch the stamp so
     # a shell opening right after a task run does not immediately repeat it.
     New-Item -ItemType File -Path $stamp -Force | Out-Null
