@@ -1,60 +1,219 @@
+<#
+.SYNOPSIS
+    One-command installer for ai-sync across any Windows machine.
+
+.DESCRIPTION
+    Clones the sync config repo and the ai-sync CLI tool, builds the CLI,
+    installs a PowerShell profile hook that auto-pulls on session start and
+    auto-pushes on session exit. Fully idempotent - safe to re-run.
+
+.PARAMETER SyncRepoUrl
+    Git URL of the shared sync config repo (your settings, skills, etc.).
+
+.PARAMETER ToolRepoUrl
+    Git URL of the ai-sync CLI tool repo.
+
+.PARAMETER SyncRepoPath
+    Local path for the sync config repo. Defaults to ~/.ai-sync
+
+.PARAMETER ToolRepoPath
+    Local path for the ai-sync CLI tool. Defaults to ~/.ai-sync-tools/ai-sync
+
+.EXAMPLE
+    # Run from the internet - one command, fully automatic:
+    iwr -useb https://raw.githubusercontent.com/JezebelTamer/ai-sync/main/install.ps1 | iex
+
+    # Or with custom args:
+    powershell -NoProfile -ExecutionPolicy Bypass -File install.ps1 `
+        -SyncRepoUrl "https://github.com/YourUser/ai-sync.git"
+#>
 param(
-    [string]$SyncRepoUrl = 'https://github.com/JezebelTamer/ai-sync.git',
-    [string]$SyncRepoPath = "$HOME/.ai-sync",
-    [string]$AiSyncRepoUrl = 'https://github.com/berlinguyinca/ai-sync.git',
-    [string]$AiSyncRepoPath = "$HOME/.ai-sync-tools/ai-sync"
+    [string]$SyncRepoUrl  = 'https://github.com/JezebelTamer/ai-sync.git',
+    [string]$ToolRepoUrl  = 'https://github.com/berlinguyinca/ai-sync.git',
+    [string]$SyncRepoPath = (Join-Path $HOME '.ai-sync'),
+    [string]$ToolRepoPath = (Join-Path $HOME '.ai-sync-tools/ai-sync')
 )
 
+Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-function Ensure-Command {
-    param([string]$Name)
+# Git writes progress to stderr which PowerShell treats as errors.
+# This helper runs a command with errors silenced.
+function Invoke-Quiet {
+    $prev = $ErrorActionPreference
+    $ErrorActionPreference = 'SilentlyContinue'
+    try { & $args[0] $args[1..($args.Length-1)] *>$null }
+    finally { $ErrorActionPreference = $prev }
+}
+
+# -- Helpers -------------------------------------------------------------------
+
+function Write-Step { param([string]$Msg) Write-Host "`n[ai-sync] $Msg" -ForegroundColor Cyan }
+function Write-OK   { param([string]$Msg) Write-Host "  [OK] $Msg" -ForegroundColor Green }
+function Write-Skip { param([string]$Msg) Write-Host "  [--] $Msg (already done)" -ForegroundColor DarkGray }
+
+function Assert-Command {
+    param([string]$Name, [string]$HelpUrl)
     if (-not (Get-Command $Name -ErrorAction SilentlyContinue)) {
-        throw "Required command '$Name' is not available."
+        Write-Host "`n[ai-sync] ERROR: '$Name' is required but not found." -ForegroundColor Red
+        if ($HelpUrl) { Write-Host "  Install it from: $HelpUrl" -ForegroundColor Yellow }
+        exit 1
     }
 }
 
-Ensure-Command git
-Ensure-Command node
-Ensure-Command npm
+function Clone-Or-Pull {
+    param([string]$Url, [string]$Path, [string]$Label)
+    if (-not (Test-Path $Path)) {
+        Write-Step "Cloning $Label"
+        Invoke-Quiet git clone --depth 1 $Url $Path
+        Write-OK "Cloned to $Path"
+    } else {
+        Write-Step "Updating $Label"
+        Invoke-Quiet git -C $Path pull --ff-only origin main
+        Write-OK "Updated $Path"
+    }
+}
 
-if (-not (Test-Path $SyncRepoPath)) {
-    Write-Host "Cloning sync repo from $SyncRepoUrl"
-    git clone $SyncRepoUrl $SyncRepoPath | Out-Null
+# -- Pre-flight checks --------------------------------------------------------
+
+Write-Step 'Checking prerequisites'
+Assert-Command 'git'  'https://git-scm.com/downloads'
+Assert-Command 'node' 'https://nodejs.org'
+Assert-Command 'npm'  'https://nodejs.org'
+Write-OK 'git, node, npm are available'
+
+# -- 1. Clone / update repos --------------------------------------------------
+
+Clone-Or-Pull -Url $SyncRepoUrl -Path $SyncRepoPath -Label 'sync config repo'
+Clone-Or-Pull -Url $ToolRepoUrl -Path $ToolRepoPath -Label 'ai-sync CLI tool'
+
+# -- 2. Build the ai-sync CLI -------------------------------------------------
+
+$cliEntry = Join-Path $ToolRepoPath 'dist' 'cli.js'
+
+if (-not (Test-Path $cliEntry)) {
+    Write-Step 'Building ai-sync CLI (first run - this takes a moment)'
 } else {
-    Write-Host "Sync repo already exists at $SyncRepoPath"
-    git -C $SyncRepoPath pull origin main | Out-Null
+    Write-Step 'Rebuilding ai-sync CLI'
 }
 
-if (-not (Test-Path $AiSyncRepoPath)) {
-    Write-Host "Cloning ai-sync tool repo from $AiSyncRepoUrl"
-    git clone $AiSyncRepoUrl $AiSyncRepoPath | Out-Null
+Push-Location $ToolRepoPath
+try {
+    Invoke-Quiet npm install --no-audit --no-fund
+    Invoke-Quiet npm run build
+}
+finally {
+    Pop-Location
+}
+
+if (-not (Test-Path $cliEntry)) {
+    Write-Host "`n[ai-sync] ERROR: CLI build failed - $cliEntry not found." -ForegroundColor Red
+    exit 1
+}
+Write-OK "CLI ready at $cliEntry"
+
+# -- 3. Initialize ai-sync environments ---------------------------------------
+
+Write-Step 'Initializing ai-sync environments'
+$nodePath = (Get-Command node).Source
+
+Invoke-Quiet $nodePath $cliEntry init --no-update-check --repo-path $SyncRepoPath
+Write-OK 'ai-sync initialized'
+
+# -- 4. Install the PowerShell profile hook ------------------------------------
+
+Write-Step 'Installing PowerShell profile hook'
+
+$profilePath = $PROFILE.CurrentUserCurrentHost
+$profileDir  = Split-Path $profilePath -Parent
+
+if (-not (Test-Path $profileDir)) {
+    New-Item -ItemType Directory -Path $profileDir -Force | Out-Null
+}
+if (-not (Test-Path $profilePath)) {
+    New-Item -ItemType File -Path $profilePath -Force | Out-Null
+}
+
+# The hook marker - used for idempotent detection and clean removal
+$hookMarker = '# >>> ai-sync auto-sync >>>'
+$hookEnd    = '# <<< ai-sync auto-sync <<<'
+
+# Escape paths for embedding in the generated script block
+$escapedSyncRepo = $SyncRepoPath -replace "'", "''"
+$escapedCliEntry = $cliEntry      -replace "'", "''"
+$escapedNodePath = $nodePath      -replace "'", "''"
+
+# Build the hook block. Uses the resolved paths so it works on any machine.
+$hookBlock = @"
+$hookMarker
+# Installed by ai-sync install.ps1 - do not edit this block manually.
+`$_aiSyncRepo = '$escapedSyncRepo'
+`$_aiSyncNode = '$escapedNodePath'
+
+# Pull latest config on session start (silent, background)
+if ((Test-Path `$_aiSyncRepo)) {
+    Start-Job -ScriptBlock {
+        param(`$r)
+        Set-Location `$r
+        git pull --ff-only origin main 2>&1 | Out-Null
+    } -ArgumentList `$_aiSyncRepo | Out-Null
+}
+
+# Push config changes on session exit
+Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action {
+    `$r = '$escapedSyncRepo'
+    if (Test-Path `$r) {
+        Set-Location `$r
+        git add -A 2>&1 | Out-Null
+        git diff --cached --quiet 2>&1
+        if (`$LASTEXITCODE -ne 0) {
+            `$ts = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
+            git commit -m "sync: auto-push `$ts from `$env:COMPUTERNAME" 2>&1 | Out-Null
+            git push origin main 2>&1 | Out-Null
+        }
+    }
+} | Out-Null
+$hookEnd
+"@
+
+# Remove any existing hook block first (idempotent re-install)
+if (Test-Path $profilePath) {
+    $content = Get-Content $profilePath -Raw -ErrorAction SilentlyContinue
+    if ($content -and ($content -match [regex]::Escape($hookMarker))) {
+        $pattern = [regex]::Escape($hookMarker) + '[\s\S]*?' + [regex]::Escape($hookEnd) + '\r?\n?'
+        $content = [regex]::Replace($content, $pattern, '')
+        Set-Content -Path $profilePath -Value $content.TrimEnd() -NoNewline
+    }
+}
+
+# Append the new hook block
+Add-Content -Path $profilePath -Value "`n$hookBlock`n"
+Write-OK "Profile hook installed at $profilePath"
+
+# -- 5. Summary ---------------------------------------------------------------
+
+Write-Host ''
+Write-Host '===========================================================' -ForegroundColor Green
+Write-Host '  ai-sync installation complete!' -ForegroundColor Green
+Write-Host '===========================================================' -ForegroundColor Green
+Write-Host ''
+Write-Host "  Sync repo    : $SyncRepoPath" -ForegroundColor White
+Write-Host "  CLI tool     : $cliEntry" -ForegroundColor White
+Write-Host "  Profile hook : $profilePath" -ForegroundColor White
+Write-Host ''
+Write-Host '  What happens automatically:' -ForegroundColor Yellow
+Write-Host '    - On session start : pulls latest config from GitHub'
+Write-Host '    - On session exit  : pushes local changes to GitHub'
+Write-Host ''
+Write-Host '  Environments configured:' -ForegroundColor Yellow
+$envFile = Join-Path $SyncRepoPath '.environments.json'
+if (Test-Path $envFile) {
+    $envs = Get-Content $envFile | ConvertFrom-Json
+    foreach ($e in $envs) { Write-Host "    - $e" }
 } else {
-    Write-Host "ai-sync tool repo already exists at $AiSyncRepoPath"
-    git -C $AiSyncRepoPath pull origin main | Out-Null
+    Write-Host '    (none yet - run ai-sync env enable <name>)'
 }
-
-$nodeExe = (Get-Command node).Source
-$npmExe = (Get-Command npm).Source
-
-Set-Location $AiSyncRepoPath
-npm install | Out-Null
-npm run build | Out-Null
-npm link | Out-Null
-
-$cliPath = Join-Path $AiSyncRepoPath 'dist/cli.js'
-$bootstrapScript = Join-Path $SyncRepoPath 'tools/ai-sync-auto/bootstrap-ai-sync-auto.ps1'
-
-if (-not (Test-Path $bootstrapScript)) {
-    throw "Bootstrap script not found: $bootstrapScript"
-}
-
-Write-Host "Installing sync config and skills"
-& $nodeExe $cliPath bootstrap $SyncRepoUrl --no-update-check | Out-Null
-
-Write-Host "Installing auto-sync hook"
-& $bootstrapScript -RepoPath $SyncRepoPath -CliPath $cliPath -NodePath $nodeExe | Out-Null
-
-Write-Host "Install complete."
-Write-Host "Sync repo: $SyncRepoPath"
-Write-Host "ai-sync CLI: $cliPath"
+Write-Host ''
+Write-Host '  To re-run this installer on another machine:' -ForegroundColor Yellow
+Write-Host '    iwr -useb https://raw.githubusercontent.com/JezebelTamer/ai-sync/main/install.ps1 | iex'
+Write-Host ''
