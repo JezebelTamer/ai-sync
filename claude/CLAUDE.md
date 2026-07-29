@@ -88,6 +88,12 @@
   diagnose around it.
 - **Past roughly 4 parallel agents, state the per-agent scope first.** One module or table per
   agent beats a broad sweep; single broad agents here have run past 200k tokens.
+- **Codex is available in the CLI (`sol`, `luna`, etc.) and does not bill Claude usage.** Consult
+  it for non-critical work: second opinions, boilerplate, research legwork, sanity checks on an
+  approach. It is off-budget, so reach for it before spending a Claude subagent on the same job.
+  Keep on Claude anything in the risky lane, anything touching production data or invariants, and
+  anything you will not personally verify — the verification rules below still apply to whatever
+  Codex hands back.
 
 ## Verification
 
