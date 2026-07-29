@@ -31,5 +31,14 @@ if (!existsSync(cliPath)) {
     process.exit(1);
 }
 
+// Force --skip-discovery onto every push (hooks, /sync skill, manual):
+// upstream tool discovery auto-migrates the sync repo to a v3 layout that
+// its own push/pull branches cannot read yet (they test version === 2),
+// which would silently break sync on every machine. Remove once upstream
+// handles v3.
+if (process.argv.includes("push") && !process.argv.includes("--skip-discovery")) {
+    process.argv.push("--skip-discovery");
+}
+
 const { program } = await import(pathToFileURL(cliPath).href);
 await program.parseAsync();
