@@ -35,22 +35,14 @@ param(
 )
 
 Set-StrictMode -Version Latest
-$ErrorActionPreference = 'Stop'
-
-# Git writes progress to stderr which PowerShell treats as errors.
-# This helper runs a command with errors silenced.
-function Invoke-Quiet {
-    $prev = $ErrorActionPreference
-    $ErrorActionPreference = 'SilentlyContinue'
-    try { & $args[0] $args[1..($args.Length-1)] *>$null }
-    finally { $ErrorActionPreference = $prev }
-}
+# Using 'Continue' because git and npm write to stderr for normal progress,
+# which PowerShell's 'Stop' treats as terminating errors.
+$ErrorActionPreference = 'Continue'
 
 # -- Helpers -------------------------------------------------------------------
 
 function Write-Step { param([string]$Msg) Write-Host "`n[ai-sync] $Msg" -ForegroundColor Cyan }
 function Write-OK   { param([string]$Msg) Write-Host "  [OK] $Msg" -ForegroundColor Green }
-function Write-Skip { param([string]$Msg) Write-Host "  [--] $Msg (already done)" -ForegroundColor DarkGray }
 
 function Assert-Command {
     param([string]$Name, [string]$HelpUrl)
@@ -65,11 +57,12 @@ function Clone-Or-Pull {
     param([string]$Url, [string]$Path, [string]$Label)
     if (-not (Test-Path $Path)) {
         Write-Step "Cloning $Label"
-        Invoke-Quiet git clone --depth 1 $Url $Path
+        git clone --depth 1 $Url $Path *>$null
+        if ($LASTEXITCODE -ne 0) { Write-Host "[ai-sync] ERROR: git clone failed for $Label" -ForegroundColor Red; exit 1 }
         Write-OK "Cloned to $Path"
     } else {
         Write-Step "Updating $Label"
-        Invoke-Quiet git -C $Path pull --ff-only origin main
+        git -C $Path pull --ff-only origin main *>$null
         Write-OK "Updated $Path"
     }
 }
@@ -89,7 +82,7 @@ Clone-Or-Pull -Url $ToolRepoUrl -Path $ToolRepoPath -Label 'ai-sync CLI tool'
 
 # -- 2. Build the ai-sync CLI -------------------------------------------------
 
-$cliEntry = Join-Path $ToolRepoPath 'dist' 'cli.js'
+$cliEntry = Join-Path (Join-Path $ToolRepoPath 'dist') 'cli.js'
 
 if (-not (Test-Path $cliEntry)) {
     Write-Step 'Building ai-sync CLI (first run - this takes a moment)'
@@ -99,8 +92,8 @@ if (-not (Test-Path $cliEntry)) {
 
 Push-Location $ToolRepoPath
 try {
-    Invoke-Quiet npm install --no-audit --no-fund
-    Invoke-Quiet npm run build
+    npm install --no-audit --no-fund *>$null
+    npm run build *>$null
 }
 finally {
     Pop-Location
@@ -117,7 +110,7 @@ Write-OK "CLI ready at $cliEntry"
 Write-Step 'Initializing ai-sync environments'
 $nodePath = (Get-Command node).Source
 
-Invoke-Quiet $nodePath $cliEntry init --no-update-check --repo-path $SyncRepoPath
+& $nodePath $cliEntry init --no-update-check --repo-path $SyncRepoPath *>$null
 Write-OK 'ai-sync initialized'
 
 # -- 4. Install the PowerShell profile hook ------------------------------------
@@ -140,22 +133,19 @@ $hookEnd    = '# <<< ai-sync auto-sync <<<'
 
 # Escape paths for embedding in the generated script block
 $escapedSyncRepo = $SyncRepoPath -replace "'", "''"
-$escapedCliEntry = $cliEntry      -replace "'", "''"
-$escapedNodePath = $nodePath      -replace "'", "''"
 
 # Build the hook block. Uses the resolved paths so it works on any machine.
 $hookBlock = @"
 $hookMarker
 # Installed by ai-sync install.ps1 - do not edit this block manually.
 `$_aiSyncRepo = '$escapedSyncRepo'
-`$_aiSyncNode = '$escapedNodePath'
 
 # Pull latest config on session start (silent, background)
 if ((Test-Path `$_aiSyncRepo)) {
     Start-Job -ScriptBlock {
         param(`$r)
         Set-Location `$r
-        git pull --ff-only origin main 2>&1 | Out-Null
+        git pull --ff-only origin main *>`$null
     } -ArgumentList `$_aiSyncRepo | Out-Null
 }
 
@@ -164,12 +154,12 @@ Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action {
     `$r = '$escapedSyncRepo'
     if (Test-Path `$r) {
         Set-Location `$r
-        git add -A 2>&1 | Out-Null
-        git diff --cached --quiet 2>&1
+        git add -A *>`$null
+        git diff --cached --quiet *>`$null
         if (`$LASTEXITCODE -ne 0) {
             `$ts = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
-            git commit -m "sync: auto-push `$ts from `$env:COMPUTERNAME" 2>&1 | Out-Null
-            git push origin main 2>&1 | Out-Null
+            git commit -m "sync: auto-push `$ts from `$env:COMPUTERNAME" *>`$null
+            git push origin main *>`$null
         }
     }
 } | Out-Null
