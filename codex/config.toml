@@ -1,0 +1,18 @@
+model = "gpt-5.6-sol"
+personality = "pragmatic"
+model_reasoning_effort = "medium"
+service_tier = "default"
+[windows]
+sandbox = "elevated"
+
+[projects.'c:\users\awilkie\onedrive - cbsboring.com\mediabot']
+trust_level = "trusted"
+
+[projects.'c:\users\awilkie\source\repos\cbs-dashboard']
+trust_level = "trusted"
+
+[projects.'c:\users\awilkie\source\repos\cbs-cmm_spc_charts']
+trust_level = "trusted"
+
+[mcp_servers.openaiDeveloperDocs]
+url = "https://developers.openai.com/mcp"
