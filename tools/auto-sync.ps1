@@ -1,6 +1,7 @@
 # ai-sync automatic sync driver, invoked by the PowerShell profile hook:
 #   auto-sync.ps1 -Mode Start   session start: throttled background pull+push
 #   auto-sync.ps1 -Mode Exit    clean session exit: best-effort bounded push
+#   auto-sync.ps1 -Mode Task    scheduled task: unthrottled inline pull+push
 #
 # Lives in the sync repo so behavior changes ship through sync itself; the
 # profile hook only needs reinstalling when this file's interface changes.
@@ -11,7 +12,7 @@
 # machine onto the legacy flat format.
 param(
     [Parameter(Mandatory = $true)]
-    [ValidateSet('Start', 'Exit')]
+    [ValidateSet('Start', 'Exit', 'Task')]
     [string]$Mode
 )
 
@@ -23,6 +24,50 @@ $lock  = Join-Path $repo '.sync.lock'
 
 if (-not (Get-Command node -ErrorAction SilentlyContinue)) { return }
 if (-not (Test-Path $cli)) { return }
+
+# The pull+push body, shared by Start (background job) and Task (inline). A
+# scheduled task's host process exits the moment the script returns and takes
+# any background job with it, so Task cannot use Start-Job.
+$syncBody = {
+    param($repo, $cli, $log, $lock)
+    # Cross-session mutex; a crashed holder goes stale after 10 minutes.
+    try {
+        if (Test-Path $lock) {
+            if (((Get-Date) - (Get-Item $lock).LastWriteTime).TotalMinutes -lt 10) { return }
+            Remove-Item $lock -Force -ErrorAction Stop
+        }
+        New-Item -ItemType File -Path $lock -ErrorAction Stop | Out-Null
+    } catch { return }
+    try {
+        & node $cli --no-update-check pull *>> $log
+        # Never push a repo wedged mid-merge: conflict markers would be
+        # committed and pulled onto every other machine.
+        if (Test-Path (Join-Path $repo '.git\MERGE_HEAD')) {
+            Add-Content $log '[auto-sync] merge pending, push skipped'
+        } else {
+            & node $cli --no-update-check push --skip-discovery *>> $log
+        }
+        # Upstream never prunes ~/.ai-sync-backups and every pull writes a
+        # full backup; keep the newest 20.
+        $backups = Join-Path (Split-Path $repo -Parent) '.ai-sync-backups'
+        if (Test-Path $backups) {
+            Get-ChildItem $backups -Directory |
+                Sort-Object Name -Descending |
+                Select-Object -Skip 20 |
+                Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    } finally {
+        Remove-Item $lock -Force -ErrorAction SilentlyContinue
+    }
+}
+
+if ($Mode -eq 'Task') {
+    # The schedule is the throttle, so no stamp check. Still touch the stamp so
+    # a shell opening right after a task run does not immediately repeat it.
+    New-Item -ItemType File -Path $stamp -Force | Out-Null
+    & $syncBody $repo $cli $log $lock
+    return
+}
 
 if ($Mode -eq 'Start') {
     # Trim the log past 1MB; a sharing violation from a concurrent writer just
@@ -38,38 +83,7 @@ if ($Mode -eq 'Start') {
     if (-not $due) { return }
     New-Item -ItemType File -Path $stamp -Force | Out-Null
 
-    Start-Job -ScriptBlock {
-        param($repo, $cli, $log, $lock)
-        # Cross-session mutex; a crashed holder goes stale after 10 minutes.
-        try {
-            if (Test-Path $lock) {
-                if (((Get-Date) - (Get-Item $lock).LastWriteTime).TotalMinutes -lt 10) { return }
-                Remove-Item $lock -Force -ErrorAction Stop
-            }
-            New-Item -ItemType File -Path $lock -ErrorAction Stop | Out-Null
-        } catch { return }
-        try {
-            & node $cli --no-update-check pull *>> $log
-            # Never push a repo wedged mid-merge: conflict markers would be
-            # committed and pulled onto every other machine.
-            if (Test-Path (Join-Path $repo '.git\MERGE_HEAD')) {
-                Add-Content $log '[auto-sync] merge pending, push skipped'
-            } else {
-                & node $cli --no-update-check push --skip-discovery *>> $log
-            }
-            # Upstream never prunes ~/.ai-sync-backups and every pull writes a
-            # full backup; keep the newest 20.
-            $backups = Join-Path (Split-Path $repo -Parent) '.ai-sync-backups'
-            if (Test-Path $backups) {
-                Get-ChildItem $backups -Directory |
-                    Sort-Object Name -Descending |
-                    Select-Object -Skip 20 |
-                    Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
-            }
-        } finally {
-            Remove-Item $lock -Force -ErrorAction SilentlyContinue
-        }
-    } -ArgumentList $repo, $cli, $log, $lock | Out-Null
+    Start-Job -ScriptBlock $syncBody -ArgumentList $repo, $cli, $log, $lock | Out-Null
     return
 }
 
