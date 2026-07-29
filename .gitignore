@@ -1,0 +1,5 @@
+# Machine-local ai-sync noise - never sync these
+.auto-sync.log
+.ai-sync-install.log
+.last-auto-pull
+.ai-sync/

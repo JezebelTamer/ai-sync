@@ -4,8 +4,14 @@
 
 .DESCRIPTION
     Clones the sync config repo and the ai-sync CLI tool, builds the CLI,
-    installs a PowerShell profile hook that auto-pulls on session start and
-    auto-pushes on session exit. Fully idempotent - safe to re-run.
+    applies the synced config to this machine (ai-sync pull), and installs a
+    PowerShell profile hook that applies fresh config on session start and
+    captures/pushes local changes on session exit. Fully idempotent - safe
+    to re-run.
+
+    All CLI calls go through tools/ai-sync.mjs in the sync repo: dist/cli.js
+    only self-executes when process.argv[1] ends with a forward-slash path,
+    which never matches on Windows, so invoking it directly is a silent no-op.
 
 .PARAMETER SyncRepoUrl
     Git URL of the shared sync config repo (your settings, skills, etc.).
@@ -104,13 +110,34 @@ if (-not (Test-Path $cliEntry)) {
 }
 Write-OK "CLI ready at $cliEntry"
 
-# -- 3. Initialize ai-sync environments ---------------------------------------
+# -- 3. Apply synced config to this machine -----------------------------------
+# NOT "init": init CAPTURES local config into a fresh repo (first-machine
+# setup). On a machine being set up from the shared repo the correct direction
+# is pull, which APPLIES the repo payload to the local config directories.
 
-Write-Step 'Initializing ai-sync environments'
+Write-Step 'Applying synced config (ai-sync pull)'
 $nodePath = (Get-Command node).Source
+$wrapper  = Join-Path $SyncRepoPath 'tools\ai-sync.mjs'
+$logFile  = Join-Path $SyncRepoPath '.ai-sync-install.log'
 
-& $nodePath $cliEntry init --no-update-check --repo-path $SyncRepoPath *>$null
-Write-OK 'ai-sync initialized'
+if (-not (Test-Path $wrapper)) {
+    Write-Host "`n[ai-sync] ERROR: launcher not found at $wrapper - sync repo out of date?" -ForegroundColor Red
+    exit 1
+}
+
+& $nodePath $wrapper --no-update-check pull *>> $logFile
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "`n[ai-sync] ERROR: ai-sync pull failed - see $logFile" -ForegroundColor Red
+    exit 1
+}
+Write-OK 'Synced config applied to local directories'
+
+& $nodePath $wrapper --no-update-check install-skills *>> $logFile
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "[ai-sync] WARNING: install-skills failed - see $logFile" -ForegroundColor Yellow
+} else {
+    Write-OK 'Slash commands installed (/sync)'
+}
 
 # -- 4. Install the PowerShell profile hook ------------------------------------
 
@@ -137,29 +164,34 @@ $escapedSyncRepo = $SyncRepoPath -replace "'", "''"
 $hookBlock = @"
 $hookMarker
 # Installed by ai-sync install.ps1 - do not edit this block manually.
+# Session start: APPLY the latest synced config (ai-sync pull, background,
+# throttled to once per hour). Session exit: CAPTURE local config changes and
+# publish them (ai-sync push). Both go through tools/ai-sync.mjs because
+# invoking dist/cli.js directly is a silent no-op on Windows.
 `$_aiSyncRepo = '$escapedSyncRepo'
+`$_aiSyncCli  = Join-Path `$_aiSyncRepo 'tools\ai-sync.mjs'
+`$_aiSyncLog  = Join-Path `$_aiSyncRepo '.auto-sync.log'
 
-# Pull latest config on session start (silent, background)
-if ((Test-Path `$_aiSyncRepo)) {
-    Start-Job -ScriptBlock {
-        param(`$r)
-        Set-Location `$r
-        git pull --ff-only origin main *>`$null
-    } -ArgumentList `$_aiSyncRepo | Out-Null
+function global:ai-sync { & node '$escapedSyncRepo\tools\ai-sync.mjs' @args }
+
+if (Test-Path `$_aiSyncCli) {
+    if ((Test-Path `$_aiSyncLog) -and ((Get-Item `$_aiSyncLog).Length -gt 1MB)) { Clear-Content `$_aiSyncLog }
+    `$_aiSyncStamp = Join-Path `$_aiSyncRepo '.last-auto-pull'
+    `$_aiSyncDue = (-not (Test-Path `$_aiSyncStamp)) -or (((Get-Date) - (Get-Item `$_aiSyncStamp).LastWriteTime).TotalMinutes -ge 60)
+    if (`$_aiSyncDue) {
+        New-Item -ItemType File -Path `$_aiSyncStamp -Force | Out-Null
+        Start-Job -ScriptBlock {
+            param(`$cli, `$log)
+            & node `$cli --no-update-check pull *>> `$log
+        } -ArgumentList `$_aiSyncCli, `$_aiSyncLog | Out-Null
+    }
 }
 
-# Push config changes on session exit
 Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action {
-    `$r = '$escapedSyncRepo'
-    if (Test-Path `$r) {
-        Set-Location `$r
-        git add -A *>`$null
-        git diff --cached --quiet *>`$null
-        if (`$LASTEXITCODE -ne 0) {
-            `$ts = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
-            git commit -m "sync: auto-push `$ts from `$env:COMPUTERNAME" *>`$null
-            git push origin main *>`$null
-        }
+    `$repo = '$escapedSyncRepo'
+    `$cli  = Join-Path `$repo 'tools\ai-sync.mjs'
+    if (Test-Path `$cli) {
+        & node `$cli --no-update-check push *>> (Join-Path `$repo '.auto-sync.log')
     }
 } | Out-Null
 $hookEnd
@@ -191,8 +223,9 @@ Write-Host "  CLI tool     : $cliEntry" -ForegroundColor White
 Write-Host "  Profile hook : $profilePath" -ForegroundColor White
 Write-Host ''
 Write-Host '  What happens automatically:' -ForegroundColor Yellow
-Write-Host '    - On session start : pulls latest config from GitHub'
-Write-Host '    - On session exit  : pushes local changes to GitHub'
+Write-Host '    - On session start : ai-sync pull applies latest config (hourly, background)'
+Write-Host '    - On session exit  : ai-sync push captures and publishes local changes'
+Write-Host '    - ai-sync is available as a command in new PowerShell sessions'
 Write-Host ''
 Write-Host '  Environments configured:' -ForegroundColor Yellow
 $envFile = Join-Path $SyncRepoPath '.environments.json'
