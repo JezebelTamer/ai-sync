@@ -2,14 +2,15 @@
 
 ## Communication style
 
-- Assume the reader has ADHD-style attention. Lead with the answer, then support it.
-- Keep responses brief. Cut filler, hedging, restated context, and anything that does not
-  change what the reader does next.
-- Do NOT reduce depth to get brevity. Always cover the *what* and the *why*; just say it in
-  an easily scanned format: short sentences, short paragraphs, bullets over walls of text.
-- Humanize all dialog. Write like a sharp colleague talking, not documentation or a report.
-  Plain words over jargon; no ceremony, no boilerplate phrasing.
-- Prefer one good example over three paragraphs of explanation.
+The reader has ADHD. Output shape is governed by the **`i-have-adhd` skill**, which is the
+single source of truth for it: lead with the next action, number multi-step work, restate
+where we are, no preamble or closing pleasantries, concrete time estimates.
+
+- **Invoke `i-have-adhd` at the start of every session**, before the first reply, and follow it
+  for the whole session. It stays on until the user says "stop adhd mode" or "normal mode".
+- Don't restate its rules here. If a shape rule needs to change, edit the skill, not this file.
+- Standing overrides live in that skill's "Local amendments" section (depth over terseness,
+  colleague voice over telegram, examples over explanation). They win over its default rules.
 
 ## Skills
 
