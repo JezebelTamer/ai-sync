@@ -1274,7 +1274,7 @@
         "url": "https://github.com/microsoft/Dataverse-skills.git",
         "path": ".github/plugins/dataverse",
         "ref": "main",
-        "sha": "a6e497123a1a8a618d9a0dd5764c660861bb9f8b"
+        "sha": "ab56d1ad56783ffce1c671b55b4d964b2d09501d"
       },
       "homepage": "https://github.com/microsoft/Dataverse-skills"
     },
@@ -1738,7 +1738,7 @@
       "source": {
         "source": "url",
         "url": "https://github.com/heygen-com/hyperframes.git",
-        "sha": "c691869e22e45da6f30098eaf3b8301e1ed6b125"
+        "sha": "4f344c50b0c70e74a791e3613c3a285531e1862f"
       },
       "homepage": "https://hyperframes.heygen.com"
     },
@@ -2765,7 +2765,7 @@
       "source": {
         "source": "url",
         "url": "https://github.com/quarkusio/quarkus-agent-mcp.git",
-        "sha": "47cd6df3582942352d63348f99e6528cd60ef93e"
+        "sha": "d39fa1cf9c1b8bcdc39265ef64b5b128605557e9"
       },
       "homepage": "https://quarkus.io"
     },
@@ -3124,7 +3124,7 @@
         "url": "https://github.com/getsentry/cli.git",
         "path": "plugins/sentry-cli",
         "ref": "main",
-        "sha": "83fb00f5dd48648fae8be17cf7addd983a084127"
+        "sha": "3e292ee4beb5c8254e0f020d2bfaf64fa16a7132"
       },
       "homepage": "https://sentry.io"
     },
@@ -3213,7 +3213,7 @@
       "source": {
         "source": "url",
         "url": "https://github.com/slackapi/slack-mcp-plugin.git",
-        "sha": "e75b0cf18f1a19f3fd629e3af9565ee84b8c2ce0"
+        "sha": "f43f620b0f7a95271ec044e3cfebeef81d2a6ee7"
       },
       "homepage": "https://github.com/slackapi/slack-mcp-plugin/tree/main"
     },
