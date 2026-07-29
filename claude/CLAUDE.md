@@ -18,6 +18,9 @@
 
 ## Output shape
 
+- **No em dashes, anywhere.** Not in chat prose, code comments, commit messages, UI copy, or
+  docs. Use a comma, colon, semicolon, period, or parentheses instead. Applies to subagent
+  prompts too: tell dispatched agents the same rule when they will write text.
 - **Invoke `i-have-adhd` before the first reply of every session** and follow it until the user
   says "stop adhd mode" or "normal mode". Its "Local amendments" outrank its own defaults.
 - **Re-invoke it after any compaction.** The invocation lives in the message history that
