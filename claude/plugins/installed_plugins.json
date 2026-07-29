@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "plugins": {
+    "superpowers@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "{{HOME}}/.claude/plugins/cache/claude-plugins-official/superpowers/6.2.0",
+        "version": "6.2.0",
+        "installedAt": "2026-07-29T00:25:37.580Z",
+        "lastUpdated": "2026-07-29T00:25:37.580Z",
+        "gitCommitSha": "3dcbd5c4b48e02263fbf4a3c01e3fe4f81d584d9"
+      }
+    ],
+    "frontend-design@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "{{HOME}}/.claude/plugins/cache/claude-plugins-official/frontend-design/unknown",
+        "version": "unknown",
+        "installedAt": "2026-07-29T00:27:00.469Z",
+        "lastUpdated": "2026-07-29T00:31:50.996Z"
+      }
+    ]
+  }
+}
