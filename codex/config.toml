@@ -1,21 +1,5 @@
-model = "gpt-5.6-sol"
-personality = "pragmatic"
-model_reasoning_effort = "medium"
-service_tier = "default"
 [windows]
 sandbox = "elevated"
 
-[projects.'c:\users\awilkie\onedrive - cbsboring.com\mediabot']
+[projects.'c:\users\txzee\.ai-sync']
 trust_level = "trusted"
-
-[projects.'c:\users\awilkie\source\repos\cbs-dashboard']
-trust_level = "trusted"
-
-[projects.'c:\users\awilkie\source\repos\cbs-cmm_spc_charts']
-trust_level = "trusted"
-
-[projects.'c:\users\awilkie\.ai-sync']
-trust_level = "trusted"
-
-[mcp_servers.openaiDeveloperDocs]
-url = "https://developers.openai.com/mcp"

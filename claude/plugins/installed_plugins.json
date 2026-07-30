@@ -19,6 +19,16 @@
         "installedAt": "2026-07-29T00:27:00.469Z",
         "lastUpdated": "2026-07-29T00:31:50.996Z"
       }
+    ],
+    "auto-memory@severity1-marketplace": [
+      {
+        "scope": "user",
+        "installPath": "{{HOME}}/.claude/plugins/cache/severity1-marketplace/auto-memory/0.9.2",
+        "version": "0.9.2",
+        "installedAt": "2026-07-29T01:17:06.973Z",
+        "lastUpdated": "2026-07-29T01:17:06.973Z",
+        "gitCommitSha": "d8254a86956f131bbedcf6045d953f44823b4b31"
+      }
     ]
   }
 }

@@ -1,0 +1,47 @@
+{
+  "name": "severity1-marketplace",
+  "owner": {
+    "name": "severity1",
+    "email": "johnreilly.pospos@gmail.com"
+  },
+  "metadata": {
+    "description": "A marketplace for Claude Code maintained by severity1.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "prompt-improver",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/severity1/claude-code-prompt-improver.git"
+      },
+      "description": "Type vibes, ship precision. Enriches vague/vibe-y prompts with research-based clarifying questions before Claude Code executes them."
+    },
+    {
+      "name": "auto-memory",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/severity1/claude-code-auto-memory.git"
+      },
+      "description": "Your CLAUDE.md, always in sync. Zero tokens. Zero config. Just works."
+    },
+    {
+      "name": "this-little-wiggy",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/severity1/this-little-wiggy.git"
+      },
+      "description": "Intercepts complex tasks and wraps them with project-specific completion criteria for autonomous ralph-loop execution."
+    },
+    {
+      "name": "nz-akahu-mcp",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/severity1/nz-akahu-mcp",
+        "path": "plugin",
+        "ref": "v0.1.5"
+      },
+      "description": "Unofficial MCP server for the Akahu open-finance API (NZ). 14 tools, read-only by default, runs locally over stdio."
+    }
+  ]
+}

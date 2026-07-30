@@ -1,24 +1,20 @@
 {
-  "permissions": {
-    "defaultMode": "auto"
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "auto-memory@severity1-marketplace": true
   },
-  "enableWorkflows": true,
   "extraKnownMarketplaces": {
-    "claude-plugins-official": {
+    "severity1-marketplace": {
       "source": {
-        "source": "git",
-        "url": "https://github.com/anthropics/claude-plugins-official.git"
+        "source": "github",
+        "repo": "severity1/severity1-marketplace"
       }
     }
   },
-  "skipWorkflowUsageWarning": true,
-  "inputNeededNotifEnabled": true,
-  "agentPushNotifEnabled": true,
   "autoUpdatesChannel": "latest",
-  "effortLevel": "xhigh",
-  "model": "claude-fable-5[1m]",
-  "enabledPlugins": {
-    "frontend-design@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true
-  }
+  "skipWorkflowUsageWarning": true,
+  "theme": "dark",
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true
 }
