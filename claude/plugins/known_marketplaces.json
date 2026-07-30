@@ -6,5 +6,13 @@
     },
     "installLocation": "{{HOME}}/.claude/plugins/marketplaces/claude-plugins-official",
     "lastUpdated": "2026-07-29T18:39:47.350Z"
+  },
+  "severity1-marketplace": {
+    "source": {
+      "source": "github",
+      "repo": "severity1/severity1-marketplace"
+    },
+    "installLocation": "{{HOME}}/.claude/plugins/marketplaces/severity1-marketplace",
+    "lastUpdated": "2026-07-30T01:50:59.843Z"
   }
 }
