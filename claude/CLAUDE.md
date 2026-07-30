@@ -91,7 +91,11 @@
   diagnose around it.
 - **Past roughly 4 parallel agents, state the per-agent scope first.** One module or table per
   agent beats a broad sweep; single broad agents here have run past 200k tokens.
-- **Codex is available in the CLI (`sol`, `luna`, etc.) and does not bill Claude usage.** Consult
+- **Codex is available in the CLI and does not bill Claude usage.** Model ids must be spelled in
+  full: `gpt-5.6-sol`, `gpt-5.6-luna`, `gpt-5.6-terra` (bare `sol` gets a 400; the unnamed
+  default is GPT-5.4, so always pass `-m`). Headless shape, verified 2026-07-29:
+  `codex exec -m gpt-5.6-sol -s read-only -C <dir> -o <last-message-file> "<prompt>"`; use
+  `-s workspace-write` when it must write files. Consult
   it for non-critical work: second opinions, boilerplate, research legwork, sanity checks on an
   approach. It is off-budget, so reach for it before spending a Claude subagent on the same job.
   Keep on Claude anything in the risky lane, anything touching production data or invariants, and
