@@ -3,3 +3,6 @@ sandbox = "elevated"
 
 [projects.'c:\users\txzee\.ai-sync']
 trust_level = "trusted"
+
+[projects.'c:\users\awilkie\onedrive - cbsboring.com\mediabot']
+trust_level = "trusted"

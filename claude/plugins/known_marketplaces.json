@@ -5,7 +5,7 @@
       "url": "https://github.com/anthropics/claude-plugins-official.git"
     },
     "installLocation": "{{HOME}}/.claude/plugins/marketplaces/claude-plugins-official",
-    "lastUpdated": "2026-07-29T18:39:47.350Z"
+    "lastUpdated": "2026-07-30T03:49:57.959Z"
   },
   "severity1-marketplace": {
     "source": {
