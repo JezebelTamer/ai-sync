@@ -6,3 +6,6 @@ trust_level = "trusted"
 
 [projects.'c:\users\awilkie\onedrive - cbsboring.com\mediabot']
 trust_level = "trusted"
+
+[projects.'c:\users\awilkie\source\repos\cbs-cmm_spc_charts']
+trust_level = "trusted"
