@@ -1,3 +1,5 @@
+model = "gpt-5.4-mini"
+model_reasoning_effort = "low"
 [windows]
 sandbox = "elevated"
 
@@ -7,5 +9,5 @@ trust_level = "trusted"
 [projects.'c:\users\awilkie\onedrive - cbsboring.com\mediabot']
 trust_level = "trusted"
 
-[projects.'c:\users\awilkie\source\repos\cbs-cmm_spc_charts']
+[projects.'c:\users\txzee\documents\github\mediabot']
 trust_level = "trusted"
