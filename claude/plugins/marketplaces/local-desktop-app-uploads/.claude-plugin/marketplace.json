@@ -1,0 +1,15 @@
+{
+  "name": "local-desktop-app-uploads",
+  "version": "1.0.0",
+  "description": "Locally uploaded plugins via Claude Desktop app",
+  "owner": {
+    "name": "Local User"
+  },
+  "plugins": [
+    {
+      "name": "mcpmarket-me",
+      "version": "0.1.0",
+      "source": "./mcpmarket-me"
+    }
+  ]
+}

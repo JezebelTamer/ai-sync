@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "mcpmarket-me": {
+      "url": "https://link.mcpmarket.com/eternal-txzeenath/toolkits/me/mcp",
+      "headers": {
+        "Authorization": "Bearer sk_user_1OpXem_ynqU_Pu_RfO3X2s2g822sTxm5"
+      }
+    }
+  }
+}

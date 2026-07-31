@@ -2,7 +2,8 @@
   "enabledPlugins": {
     "superpowers@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true,
-    "auto-memory@severity1-marketplace": true
+    "auto-memory@severity1-marketplace": true,
+    "mcpmarket-me@local-desktop-app-uploads": true
   },
   "extraKnownMarketplaces": {
     "severity1-marketplace": {
