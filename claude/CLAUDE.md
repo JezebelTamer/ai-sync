@@ -174,6 +174,15 @@
 
 - **Commit each verified iteration**, not one end-of-session commit. A commit is a cheap bisect
   anchor. Stage only the files belonging to the change.
+- **Write the commit message to a file, then `git commit -F <file>`.** Never pass a multi-line
+  message as a `-m` here-string. PowerShell mangles a here-string carrying quotes, `#`, or a
+  colon-space, and the failure names the wrong culprit: the message splits into arguments and git
+  reports `pathspec 'is' did not match any file(s)`, which reads as a staging problem rather than
+  a quoting one. Via `-F` the text never reaches the shell parser. Put the file in the scratchpad,
+  not the repo.
+  ```powershell
+  git commit -F "$env:TEMP\claude\<session>\scratchpad\commitmsg.txt"
+  ```
 - **Never push to a remote unprompted**, and never force push.
 
 ## Code comments
