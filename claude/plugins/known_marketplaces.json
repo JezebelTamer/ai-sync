@@ -5,7 +5,7 @@
       "repo": "anthropics/claude-plugins-official"
     },
     "installLocation": "{{HOME}}/.claude/plugins/marketplaces/claude-plugins-official",
-    "lastUpdated": "2026-07-30T04:05:20.504Z"
+    "lastUpdated": "2026-08-01T03:37:36.227Z"
   },
   "severity1-marketplace": {
     "source": {
