@@ -1,11 +1,11 @@
 {
   "claude-plugins-official": {
     "source": {
-      "source": "git",
-      "url": "https://github.com/anthropics/claude-plugins-official.git"
+      "source": "github",
+      "repo": "anthropics/claude-plugins-official"
     },
     "installLocation": "{{HOME}}/.claude/plugins/marketplaces/claude-plugins-official",
-    "lastUpdated": "2026-07-30T09:20:32.191Z"
+    "lastUpdated": "2026-07-30T04:05:20.504Z"
   },
   "severity1-marketplace": {
     "source": {
@@ -13,14 +13,6 @@
       "repo": "severity1/severity1-marketplace"
     },
     "installLocation": "{{HOME}}/.claude/plugins/marketplaces/severity1-marketplace",
-    "lastUpdated": "2026-07-30T01:50:59.843Z"
-  },
-  "local-desktop-app-uploads": {
-    "source": {
-      "source": "directory",
-      "path": "{{HOME}}/.claude/plugins/marketplaces/local-desktop-app-uploads"
-    },
-    "installLocation": "{{HOME}}/.claude/plugins/marketplaces/local-desktop-app-uploads",
-    "lastUpdated": "2026-07-31T11:46:34.006Z"
+    "lastUpdated": "2026-07-29T01:16:58.914Z"
   }
 }
