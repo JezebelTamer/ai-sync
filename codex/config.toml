@@ -20,15 +20,15 @@ url = "https://developers.openai.com/mcp"
 
 [mcp_servers.node_repl]
 args = []
-command = "C:\\Users\\txzee\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\fb8898c05a62885e\\bin\\node_repl.exe"
+command = '{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\fb8898c05a62885e\bin\node_repl.exe'
 startup_timeout_sec = 120
 
 [mcp_servers.node_repl.env]
 NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
-NODE_REPL_NODE_MODULE_DIRS = "C:\\Users\\txzee\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\fb8898c05a62885e\\bin\\node_modules"
-NODE_REPL_NODE_PATH = "C:\\Users\\txzee\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\fb8898c05a62885e\\bin\\node.exe"
-NODE_REPL_TRUSTED_CODE_PATHS = "C:\\Users\\txzee\\.codex"
-CODEX_HOME = "C:\\Users\\txzee\\.codex"
+NODE_REPL_NODE_MODULE_DIRS = '{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\fb8898c05a62885e\bin\node_modules'
+NODE_REPL_NODE_PATH = '{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\fb8898c05a62885e\bin\node.exe'
+NODE_REPL_TRUSTED_CODE_PATHS = '{{HOME}}\.codex'
+CODEX_HOME = '{{HOME}}\.codex'
 NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "c5e8b73f10ecc47ad1be38f14ba6b79cd3af06fcd86637f7b6b857ae209a686e,f204d340535055781952b10ed396de20b842f00a19e430852f7e121ad1ce91f6"
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
@@ -36,13 +36,13 @@ NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunct
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
 BROWSER_USE_CODEX_APP_VERSION = "26.727.51351"
 SKY_CUA_NATIVE_PIPE = "1"
-SKY_CUA_NATIVE_PIPE_DIRECTORY = "\\\\.\\pipe\\codex-computer-use-6fa8058a-e33d-4c77-ac88-0f00cebfcc92"
-CODEX_CLI_PATH = "C:\\Users\\txzee\\AppData\\Local\\OpenAI\\Codex\\bin\\d7e8094cfb76a267\\codex.exe"
+SKY_CUA_NATIVE_PIPE_DIRECTORY = '\\.\pipe\codex-computer-use-6fa8058a-e33d-4c77-ac88-0f00cebfcc92'
+CODEX_CLI_PATH = '{{HOME}}\AppData\Local\OpenAI\Codex\bin\d7e8094cfb76a267\codex.exe'
 
 [marketplaces.openai-bundled]
-last_updated = "2026-08-02T04:16:23Z"
+last_updated = "2026-08-02T17:16:55Z"
 source_type = "local"
-source = "\\\\?\\C:\\Users\\txzee\\.codex\\.tmp\\bundled-marketplaces\\openai-bundled"
+source = '\\?\{{HOME}}\.codex\.tmp\bundled-marketplaces\openai-bundled'
 
 [marketplaces.claude-plugins-official]
 last_updated = "2026-08-02T06:24:28Z"
@@ -57,7 +57,7 @@ source_type = "git"
 source = "https://github.com/severity1/severity1-marketplace.git"
 
 [marketplaces.claude-cowork]
-last_updated = "2026-08-02T04:17:10Z"
+last_updated = "2026-08-02T17:16:53Z"
 source_type = "local"
 source = '\\?\{{HOME}}\.codex\plugins\cache\claude-cowork'
 
@@ -65,9 +65,6 @@ source = '\\?\{{HOME}}\.codex\plugins\cache\claude-cowork'
 last_updated = "2026-08-02T04:17:13Z"
 source_type = "local"
 source = '\\?\{{HOME}}\.cache\codex-runtimes\codex-primary-runtime\plugins\openai-primary-runtime'
-
-[plugins."sites@openai-bundled"]
-enabled = true
 
 [plugins."browser@openai-bundled"]
 enabled = true
@@ -112,6 +109,9 @@ enabled = true
 enabled = true
 
 [plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
+[plugins."sites@openai-bundled"]
 enabled = true
 
 [features]
