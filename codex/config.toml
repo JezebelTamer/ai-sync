@@ -1,7 +1,7 @@
 model = "gpt-5.6-sol"
 model_reasoning_effort = "high"
 notify = [ "C:\\Users\\txzee\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\fb8898c05a62885e\\bin\\node_modules\\@oai\\sky\\bin\\windows\\codex-computer-use.exe", "turn-ended" ]
-service_tier = "priority"
+service_tier = "default"
 
 [windows]
 sandbox = "elevated"
@@ -45,12 +45,14 @@ source_type = "local"
 source = "\\\\?\\C:\\Users\\txzee\\.codex\\.tmp\\bundled-marketplaces\\openai-bundled"
 
 [marketplaces.claude-plugins-official]
-last_updated = "2026-08-02T04:17:03Z"
+last_updated = "2026-08-02T06:24:28Z"
+last_revision = "d620fb7d8349b66bbe281ea74cd346287abb6a48"
 source_type = "git"
 source = "https://github.com/anthropics/claude-plugins-official.git"
 
 [marketplaces.severity1-marketplace]
-last_updated = "2026-08-02T04:17:05Z"
+last_updated = "2026-08-02T06:24:29Z"
+last_revision = "90f0c0bc1c702af1b9f93d9d0dccf825be874dee"
 source_type = "git"
 source = "https://github.com/severity1/severity1-marketplace.git"
 
