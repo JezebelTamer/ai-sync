@@ -57,7 +57,7 @@ source_type = "git"
 source = "https://github.com/severity1/severity1-marketplace.git"
 
 [marketplaces.claude-cowork]
-last_updated = "2026-08-02T17:16:53Z"
+last_updated = "2026-08-02T20:08:25Z"
 source_type = "local"
 source = '\\?\{{HOME}}\.codex\plugins\cache\claude-cowork'
 
