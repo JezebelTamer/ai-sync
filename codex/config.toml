@@ -1,16 +1,121 @@
 model = "gpt-5.6-sol"
-model_reasoning_effort = "low"
+model_reasoning_effort = "ultra"
+notify = [ "C:\\Users\\txzee\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\fb8898c05a62885e\\bin\\node_modules\\@oai\\sky\\bin\\windows\\codex-computer-use.exe", "turn-ended" ]
+service_tier = "priority"
+
 [windows]
 sandbox = "elevated"
 
-[projects.'c:\users\txzee\.ai-sync']
+[projects."c:\\users\\txzee\\.ai-sync"]
 trust_level = "trusted"
 
-[projects.'c:\users\awilkie\onedrive - cbsboring.com\mediabot']
+[projects."c:\\users\\awilkie\\onedrive - cbsboring.com\\mediabot"]
 trust_level = "trusted"
 
-[projects.'c:\users\txzee\documents\github\mediabot']
+[projects."c:\\users\\txzee\\documents\\github\\mediabot"]
 trust_level = "trusted"
 
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"
+
+[mcp_servers.node_repl]
+args = []
+command = "C:\\Users\\txzee\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\fb8898c05a62885e\\bin\\node_repl.exe"
+startup_timeout_sec = 120
+
+[mcp_servers.node_repl.env]
+NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
+NODE_REPL_NODE_MODULE_DIRS = "C:\\Users\\txzee\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\fb8898c05a62885e\\bin\\node_modules"
+NODE_REPL_NODE_PATH = "C:\\Users\\txzee\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\fb8898c05a62885e\\bin\\node.exe"
+NODE_REPL_TRUSTED_CODE_PATHS = "C:\\Users\\txzee\\.codex"
+CODEX_HOME = "C:\\Users\\txzee\\.codex"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "c5e8b73f10ecc47ad1be38f14ba6b79cd3af06fcd86637f7b6b857ae209a686e,f204d340535055781952b10ed396de20b842f00a19e430852f7e121ad1ce91f6"
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
+NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
+BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
+BROWSER_USE_CODEX_APP_VERSION = "26.727.51351"
+SKY_CUA_NATIVE_PIPE = "1"
+SKY_CUA_NATIVE_PIPE_DIRECTORY = "\\\\.\\pipe\\codex-computer-use-6fa8058a-e33d-4c77-ac88-0f00cebfcc92"
+CODEX_CLI_PATH = "C:\\Users\\txzee\\AppData\\Local\\OpenAI\\Codex\\bin\\d7e8094cfb76a267\\codex.exe"
+
+[marketplaces.openai-bundled]
+last_updated = "2026-08-02T04:16:23Z"
+source_type = "local"
+source = "\\\\?\\C:\\Users\\txzee\\.codex\\.tmp\\bundled-marketplaces\\openai-bundled"
+
+[marketplaces.claude-plugins-official]
+last_updated = "2026-08-02T04:17:03Z"
+source_type = "git"
+source = "https://github.com/anthropics/claude-plugins-official.git"
+
+[marketplaces.severity1-marketplace]
+last_updated = "2026-08-02T04:17:05Z"
+source_type = "git"
+source = "https://github.com/severity1/severity1-marketplace.git"
+
+[marketplaces.claude-cowork]
+last_updated = "2026-08-02T04:17:10Z"
+source_type = "local"
+source = '\\?\{{HOME}}\.codex\plugins\cache\claude-cowork'
+
+[marketplaces.openai-primary-runtime]
+last_updated = "2026-08-02T04:17:13Z"
+source_type = "local"
+source = '\\?\{{HOME}}\.cache\codex-runtimes\codex-primary-runtime\plugins\openai-primary-runtime'
+
+[plugins."sites@openai-bundled"]
+enabled = true
+
+[plugins."browser@openai-bundled"]
+enabled = true
+
+[plugins."visualize@openai-bundled"]
+enabled = true
+
+[plugins."google-calendar@openai-curated"]
+enabled = true
+
+[plugins."slack@openai-curated"]
+enabled = true
+
+[plugins."frontend-design@claude-plugins-official"]
+enabled = true
+
+[plugins."superpowers@claude-plugins-official"]
+enabled = true
+
+[plugins."auto-memory@severity1-marketplace"]
+enabled = true
+
+[plugins."data@claude-cowork"]
+enabled = true
+
+[plugins."design@claude-cowork"]
+enabled = true
+
+[plugins."productivity@claude-cowork"]
+enabled = true
+
+[plugins."documents@openai-primary-runtime"]
+enabled = true
+
+[plugins."pdf@openai-primary-runtime"]
+enabled = true
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
+
+[plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
+[features]
+js_repl = false
+
+[shell_environment_policy.set]
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "c5e8b73f10ecc47ad1be38f14ba6b79cd3af06fcd86637f7b6b857ae209a686e,f204d340535055781952b10ed396de20b842f00a19e430852f7e121ad1ce91f6"
+NODE_REPL_TRUSTED_CODE_PATHS = "C:\\Users\\txzee\\.codex"
