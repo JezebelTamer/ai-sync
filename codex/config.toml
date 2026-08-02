@@ -45,8 +45,8 @@ source_type = "local"
 source = '\\?\{{HOME}}\.codex\.tmp\bundled-marketplaces\openai-bundled'
 
 [marketplaces.claude-plugins-official]
-last_updated = "2026-08-02T06:24:28Z"
-last_revision = "d620fb7d8349b66bbe281ea74cd346287abb6a48"
+last_updated = "2026-08-02T21:06:59Z"
+last_revision = "7217edcd2b0922a1f411e9c92b5b4e2eb6d43604"
 source_type = "git"
 source = "https://github.com/anthropics/claude-plugins-official.git"
 
@@ -121,3 +121,7 @@ js_repl = false
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "c5e8b73f10ecc47ad1be38f14ba6b79cd3af06fcd86637f7b6b857ae209a686e,f204d340535055781952b10ed396de20b842f00a19e430852f7e121ad1ce91f6"
 NODE_REPL_TRUSTED_CODE_PATHS = "C:\\Users\\txzee\\.codex"
+
+[desktop]
+external-agent-import-sync-enabled = false
+show-context-window-usage = true
