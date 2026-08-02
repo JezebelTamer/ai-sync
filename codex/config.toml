@@ -62,7 +62,7 @@ source_type = "local"
 source = '\\?\{{HOME}}\.codex\plugins\cache\claude-cowork'
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-08-02T04:17:13Z"
+last_updated = "2026-08-02T19:53:17Z"
 source_type = "local"
 source = '\\?\{{HOME}}\.cache\codex-runtimes\codex-primary-runtime\plugins\openai-primary-runtime'
 
