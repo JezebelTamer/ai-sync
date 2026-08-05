@@ -40,7 +40,7 @@ SKY_CUA_NATIVE_PIPE_DIRECTORY = '\\.\pipe\codex-computer-use-6fa8058a-e33d-4c77-
 CODEX_CLI_PATH = '{{HOME}}\AppData\Local\OpenAI\Codex\bin\d7e8094cfb76a267\codex.exe'
 
 [marketplaces.openai-bundled]
-last_updated = "2026-08-05T00:33:23Z"
+last_updated = "2026-08-05T01:06:30Z"
 source_type = "local"
 source = '\\?\{{HOME}}\.codex\.tmp\bundled-marketplaces\openai-bundled'
 
@@ -129,3 +129,4 @@ NODE_REPL_TRUSTED_CODE_PATHS = "C:\\Users\\txzee\\.codex"
 external-agent-import-sync-enabled = false
 show-context-window-usage = true
 keepRemoteControlAwakeWhilePluggedIn = false
+followUpQueueMode = "queue"
