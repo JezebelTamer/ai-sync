@@ -27,17 +27,17 @@ startup_timeout_sec = 120
 NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
 NODE_REPL_NODE_MODULE_DIRS = '{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\fb8898c05a62885e\bin\node_modules'
 NODE_REPL_NODE_PATH = '{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\fb8898c05a62885e\bin\node.exe'
-NODE_REPL_TRUSTED_CODE_PATHS = '{{HOME}}\.codex'
+NODE_REPL_TRUSTED_CODE_PATHS = '{{HOME}}\.codex;{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\fb8898c05a62885e\bin\node_modules'
 CODEX_HOME = '{{HOME}}\.codex'
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "c5e8b73f10ecc47ad1be38f14ba6b79cd3af06fcd86637f7b6b857ae209a686e,f204d340535055781952b10ed396de20b842f00a19e430852f7e121ad1ce91f6"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "d8a321a14963536a3711296cdcbdf8571c70122b8106871742dd8eba302e96af"
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.727.51351"
+BROWSER_USE_CODEX_APP_VERSION = "26.730.61309"
 SKY_CUA_NATIVE_PIPE = "1"
-SKY_CUA_NATIVE_PIPE_DIRECTORY = '\\.\pipe\codex-computer-use-6fa8058a-e33d-4c77-ac88-0f00cebfcc92'
-CODEX_CLI_PATH = '{{HOME}}\AppData\Local\OpenAI\Codex\bin\d7e8094cfb76a267\codex.exe'
+SKY_CUA_NATIVE_PIPE_DIRECTORY = '\\.\pipe\codex-computer-use-5144bb4b-69f6-4841-850e-983ab7f9f8fd'
+CODEX_CLI_PATH = '{{HOME}}\AppData\Local\OpenAI\Codex\bin\68de26ad08be95cd\codex.exe'
 
 [marketplaces.openai-bundled]
 last_updated = "2026-08-05T01:06:30Z"
@@ -122,8 +122,8 @@ js_repl = false
 
 [shell_environment_policy.set]
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "c5e8b73f10ecc47ad1be38f14ba6b79cd3af06fcd86637f7b6b857ae209a686e,f204d340535055781952b10ed396de20b842f00a19e430852f7e121ad1ce91f6"
-NODE_REPL_TRUSTED_CODE_PATHS = "C:\\Users\\txzee\\.codex"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "d8a321a14963536a3711296cdcbdf8571c70122b8106871742dd8eba302e96af"
+NODE_REPL_TRUSTED_CODE_PATHS = '{{HOME}}\.codex;{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\fb8898c05a62885e\bin\node_modules'
 
 [desktop]
 external-agent-import-sync-enabled = false
