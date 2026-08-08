@@ -1,8 +1,8 @@
 model = "gpt-5.6-sol"
 model_reasoning_effort = "high"
-notify = [ "C:\\Users\\txzee\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\fb8898c05a62885e\\bin\\node_modules\\@oai\\sky\\bin\\windows\\codex-computer-use.exe", "turn-ended" ]
 service_tier = "default"
 
+notify = [ "C:\\Users\\txzee\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\f1bf3cd3a5929acd\\bin\\node_modules\\@oai\\sky\\bin\\windows\\codex-computer-use.exe", "turn-ended" ]
 [windows]
 sandbox = "elevated"
 
@@ -20,33 +20,33 @@ url = "https://developers.openai.com/mcp"
 
 [mcp_servers.node_repl]
 args = []
-command = '{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\fb8898c05a62885e\bin\node_repl.exe'
+command = '{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\f1bf3cd3a5929acd\bin\node_repl.exe'
 startup_timeout_sec = 120
 
 [mcp_servers.node_repl.env]
 NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
-NODE_REPL_NODE_MODULE_DIRS = '{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\fb8898c05a62885e\bin\node_modules'
-NODE_REPL_NODE_PATH = '{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\fb8898c05a62885e\bin\node.exe'
-NODE_REPL_TRUSTED_CODE_PATHS = '{{HOME}}\.codex;{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\fb8898c05a62885e\bin\node_modules'
+NODE_REPL_NODE_MODULE_DIRS = '{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\f1bf3cd3a5929acd\bin\node_modules'
+NODE_REPL_NODE_PATH = '{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\f1bf3cd3a5929acd\bin\node.exe'
+NODE_REPL_TRUSTED_CODE_PATHS = '{{HOME}}\.codex;{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\f1bf3cd3a5929acd\bin\node_modules'
 CODEX_HOME = '{{HOME}}\.codex'
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "d8a321a14963536a3711296cdcbdf8571c70122b8106871742dd8eba302e96af"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "e7f98a8ce324234ed7f3be8fa39ba54b26e2e8fc79feed2470dcd0871af4a5b3"
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.730.61309"
+BROWSER_USE_CODEX_APP_VERSION = "26.803.41515"
 SKY_CUA_NATIVE_PIPE = "1"
-SKY_CUA_NATIVE_PIPE_DIRECTORY = '\\.\pipe\codex-computer-use-5144bb4b-69f6-4841-850e-983ab7f9f8fd'
-CODEX_CLI_PATH = '{{HOME}}\AppData\Local\OpenAI\Codex\bin\68de26ad08be95cd\codex.exe'
+SKY_CUA_NATIVE_PIPE_DIRECTORY = '\\.\pipe\codex-computer-use-57e637da-fc28-4603-a15f-24291da5292a'
+CODEX_CLI_PATH = '{{HOME}}\AppData\Local\OpenAI\Codex\bin\cfac6bda2d141e07\codex.exe'
 
 [marketplaces.openai-bundled]
-last_updated = "2026-08-05T01:06:30Z"
+last_updated = "2026-08-08T16:07:00Z"
 source_type = "local"
 source = '\\?\{{HOME}}\.codex\.tmp\bundled-marketplaces\openai-bundled'
 
 [marketplaces.claude-plugins-official]
-last_updated = "2026-08-05T00:41:35Z"
-last_revision = "60f5e338b2aa4a757b115a3bbea635d6727ea530"
+last_updated = "2026-08-08T16:06:49Z"
+last_revision = "b840f2f29f1668f313f9994c0dd595c5e29146f2"
 source_type = "git"
 source = "https://github.com/anthropics/claude-plugins-official.git"
 
@@ -122,11 +122,12 @@ js_repl = false
 
 [shell_environment_policy.set]
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "d8a321a14963536a3711296cdcbdf8571c70122b8106871742dd8eba302e96af"
-NODE_REPL_TRUSTED_CODE_PATHS = '{{HOME}}\.codex;{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\fb8898c05a62885e\bin\node_modules'
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "e7f98a8ce324234ed7f3be8fa39ba54b26e2e8fc79feed2470dcd0871af4a5b3"
+NODE_REPL_TRUSTED_CODE_PATHS = '{{HOME}}\.codex;{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\f1bf3cd3a5929acd\bin\node_modules'
 
 [desktop]
 external-agent-import-sync-enabled = false
 show-context-window-usage = true
 keepRemoteControlAwakeWhilePluggedIn = false
 followUpQueueMode = "queue"
+conversationDetailMode = "STEPS_PROSE"
