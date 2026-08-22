@@ -60,7 +60,6 @@ source_type = "git"
 source = "https://github.com/severity1/severity1-marketplace.git"
 
 [marketplaces.claude-cowork]
-last_updated = "2026-08-05T00:35:05Z"
 source_type = "local"
 source = '\\?\{{HOME}}\.codex\plugins\cache\claude-cowork'
 
@@ -120,6 +119,9 @@ enabled = true
 enabled = true
 
 [plugins."codex-app-tools@openai-bundled"]
+enabled = true
+
+[plugins."chrome@openai-bundled"]
 enabled = true
 
 [features]
