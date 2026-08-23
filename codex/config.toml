@@ -3,6 +3,7 @@ model_reasoning_effort = "xhigh"
 service_tier = "default"
 
 notify = [ "C:\\Users\\txzee\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\cd454f7c85348168\\bin\\node_modules\\@oai\\sky\\bin\\windows\\codex-computer-use.exe", "turn-ended" ]
+approvals_reviewer = "user"
 [windows]
 sandbox = "elevated"
 
@@ -25,6 +26,9 @@ trust_level = "trusted"
 trust_level = "trusted"
 
 [projects.'c:\users\txzee\documents\codex\2026-08-23\windows-powershell-copyright-c-microsoft-corporation']
+trust_level = "trusted"
+
+[projects.'c:\windows\system32']
 trust_level = "trusted"
 
 [mcp_servers.openaiDeveloperDocs]
@@ -57,8 +61,8 @@ source_type = "local"
 source = '\\?\{{HOME}}\.codex\.tmp\bundled-marketplaces\openai-bundled'
 
 [marketplaces.claude-plugins-official]
-last_updated = "2026-08-08T16:06:49Z"
-last_revision = "b840f2f29f1668f313f9994c0dd595c5e29146f2"
+last_updated = "2026-08-23T19:02:53Z"
+last_revision = "340e33aef211d95769d252324854497af871dafe"
 source_type = "git"
 source = "https://github.com/anthropics/claude-plugins-official.git"
 
@@ -145,3 +149,17 @@ show-context-window-usage = true
 keepRemoteControlAwakeWhilePluggedIn = false
 followUpQueueMode = "queue"
 conversationDetailMode = "STEPS_COMMANDS"
+
+[hooks.state]
+
+[hooks.state."auto-memory@severity1-marketplace:hooks/hooks.json:pre_tool_use:0:0"]
+trusted_hash = "sha256:ef863125e89d1c4c4580443f1ff79548786ddd03682a61c9591732a8f93f84c2"
+
+[hooks.state."auto-memory@severity1-marketplace:hooks/hooks.json:post_tool_use:0:0"]
+trusted_hash = "sha256:e6c11e956401708b6ec1137c0c9ba833684972a86caaee0391a56b2c4be211f3"
+
+[hooks.state."auto-memory@severity1-marketplace:hooks/hooks.json:subagent_stop:0:0"]
+trusted_hash = "sha256:099410ed0bffd9239c3ef65796b68bb639b055272220c775d3714a0bd6bb2ddc"
+
+[hooks.state."auto-memory@severity1-marketplace:hooks/hooks.json:stop:0:0"]
+trusted_hash = "sha256:b1360702c22a3a80150183fcc05c9c97143653fe3819377d2b3e1660d9db1d85"
