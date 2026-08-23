@@ -1,5 +1,5 @@
 model = "gpt-5.6-sol"
-model_reasoning_effort = "high"
+model_reasoning_effort = "xhigh"
 service_tier = "default"
 
 notify = [ "C:\\Users\\txzee\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\cd454f7c85348168\\bin\\node_modules\\@oai\\sky\\bin\\windows\\codex-computer-use.exe", "turn-ended" ]
@@ -22,6 +22,9 @@ trust_level = "trusted"
 trust_level = "trusted"
 
 [projects.'c:\users\txzee\documents\codex\2026-08-22\se']
+trust_level = "trusted"
+
+[projects.'c:\users\txzee\documents\codex\2026-08-23\windows-powershell-copyright-c-microsoft-corporation']
 trust_level = "trusted"
 
 [mcp_servers.openaiDeveloperDocs]
