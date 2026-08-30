@@ -2,8 +2,8 @@ model = "gpt-5.6-sol"
 model_reasoning_effort = "medium"
 service_tier = "default"
 
-notify = [ "C:\\Users\\txzee\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\cd454f7c85348168\\bin\\node_modules\\@oai\\sky\\bin\\windows\\codex-computer-use.exe", "turn-ended" ]
 approvals_reviewer = "user"
+notify = [ "C:\\Users\\txzee\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\e4d75eceaa042f20\\bin\\node_modules\\@oai\\sky\\bin\\windows\\codex-computer-use.exe", "turn-ended" ]
 [windows]
 sandbox = "elevated"
 
@@ -37,30 +37,37 @@ trust_level = "trusted"
 [projects.'c:\users\txzee\documents\codex\2026-08-23\u']
 trust_level = "trusted"
 
+[projects.'c:\users\txzee\documents\codex\2026-08-29\i']
+trust_level = "trusted"
+
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"
 
 [mcp_servers.node_repl]
 args = []
-command = '{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\cd454f7c85348168\bin\node_repl.exe'
+command = '{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\e4d75eceaa042f20\bin\node_repl.exe'
 startup_timeout_sec = 120
 
 [mcp_servers.node_repl.env]
 NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
-NODE_REPL_NODE_MODULE_DIRS = '{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\cd454f7c85348168\bin\node_modules'
-NODE_REPL_NODE_PATH = '{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\cd454f7c85348168\bin\node.exe'
-NODE_REPL_TRUSTED_CODE_PATHS = '{{HOME}}\.codex;{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\cd454f7c85348168\bin\node_modules'
+NODE_REPL_NODE_MODULE_DIRS = '{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\e4d75eceaa042f20\bin\node_modules'
+NODE_REPL_NODE_PATH = '{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\e4d75eceaa042f20\bin\node.exe'
+NODE_REPL_TRUSTED_CODE_PATHS = '{{HOME}}\.codex;{{HOME}}\AppData\Local\OpenAI\Codex\runtimes\cua_node\e4d75eceaa042f20\bin\node_modules'
 CODEX_HOME = '{{HOME}}\.codex'
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 BROWSER_USE_TINYSKY_ENABLED = "0"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.818.41509"
-NODE_REPL_TRUSTED_SERVICES = '{"browser":"C:/Users/txzee/.codex/plugins/cache/openai-bundled/browser/26.818.41509/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
+BROWSER_USE_CODEX_APP_VERSION = "26.825.32147"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"C:/Users/txzee/.codex/plugins/cache/openai-bundled/browser/26.825.32147/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
 SKY_CUA_NATIVE_PIPE = "1"
-SKY_CUA_NATIVE_PIPE_DIRECTORY = '\\.\pipe\codex-computer-use-7acfe241-a385-4ab9-b195-8446d1d58985'
-CODEX_CLI_PATH = '{{HOME}}\AppData\Local\OpenAI\Codex\bin\110b3d66a02d864e\codex.exe'
+SKY_CUA_NATIVE_PIPE_DIRECTORY = '\\.\pipe\codex-computer-use-50f16f06-ece8-4546-b96e-63072de9f0ae'
+CODEX_CLI_PATH = '{{HOME}}\AppData\Local\OpenAI\Codex\bin\fac60c5e9a2ae3df\codex.exe'
+
+[mcp_servers.cua_repl]
+command = 'C:\Program Files\WindowsApps\OpenAI.Codex_26.825.4187.0_x64__2p2nqsd0c76g0\app\ChatGPT.exe'
+enabled = false
 
 [marketplaces.openai-bundled]
 source_type = "local"
