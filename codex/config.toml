@@ -1,5 +1,5 @@
-model = "gpt-5.6-sol"
-model_reasoning_effort = "medium"
+model = "gpt-6-astra"
+model_reasoning_effort = "low"
 service_tier = "default"
 
 approvals_reviewer = "user"
@@ -38,6 +38,9 @@ trust_level = "trusted"
 trust_level = "trusted"
 
 [projects.'c:\users\txzee\documents\codex\2026-08-29\i']
+trust_level = "trusted"
+
+[projects.'c:\users\txzee\documents\codex\2026-09-12\can']
 trust_level = "trusted"
 
 [mcp_servers.openaiDeveloperDocs]
@@ -157,7 +160,7 @@ external-agent-import-sync-enabled = false
 show-context-window-usage = true
 keepRemoteControlAwakeWhilePluggedIn = false
 followUpQueueMode = "queue"
-conversationDetailMode = "STEPS_PROSE"
+conversationDetailMode = "STEPS_COMMANDS"
 
 [hooks.state]
 
