@@ -43,6 +43,9 @@ trust_level = "trusted"
 [projects.'c:\users\txzee\documents\codex\2026-09-12\can']
 trust_level = "trusted"
 
+[projects.'c:\users\txzee\documents\codex\2026-09-22\best-realistic-minecraft-texture-pack-mod']
+trust_level = "trusted"
+
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"
 
@@ -65,7 +68,7 @@ BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
 BROWSER_USE_CODEX_APP_VERSION = "26.908.40834"
 NODE_REPL_TRUSTED_SERVICES = '{"browser":"C:/Users/txzee/.codex/plugins/cache/openai-bundled/browser/26.908.40834/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
 SKY_CUA_NATIVE_PIPE = "1"
-SKY_CUA_NATIVE_PIPE_DIRECTORY = '\\.\pipe\codex-computer-use-9b8317df-de2b-4458-9985-84f2d0cf8b7c'
+SKY_CUA_NATIVE_PIPE_DIRECTORY = '\\.\pipe\codex-computer-use-1608a9d3-0db5-4b58-b4ec-4a7182ab8094'
 CODEX_CLI_PATH = '{{HOME}}\AppData\Local\OpenAI\Codex\bin\bffc5354119c8421\codex.exe'
 
 [marketplaces.openai-bundled]
